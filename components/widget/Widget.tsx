@@ -32,7 +32,7 @@ const Widget = () => {
         >
           <ReadNow open={openReadNow} setOpenComicsPanel={setOpenComicsPanel} />
           <TouchableOpacity
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             onPress={() => setOpenReadNow(!openReadNow)}
           >
             <CircleText />

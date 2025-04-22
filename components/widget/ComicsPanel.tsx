@@ -6,6 +6,7 @@ import {
   Image,
   Animated,
   Dimensions,
+  TouchableOpacity,
 } from "react-native"
 import React, { useEffect, useRef, useState } from "react"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
@@ -76,12 +77,18 @@ const ComicsPanel = ({
               gap: 10,
             }}
           >
-            <Pressable onPress={() => setExpand(!expand)}>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => setExpand(!expand)}
+            >
               <FontAwesome name="expand" size={18} color="#9C9A9A" />
-            </Pressable>
-            <Pressable onPress={() => setOpenComicsPanel(!visible)}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => setOpenComicsPanel(!visible)}
+            >
               <AntDesign name="close" size={18} color="#CF2C2C" />
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </Animated.View>
