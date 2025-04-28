@@ -3,10 +3,12 @@ import React, { useState } from "react"
 import CircleText from "./CircularText"
 import ReadNow from "./ReadNow"
 import ComicsPanel from "./ComicsPanel"
+import InComicsPanel from "./InComicsPanel"
 
 const Widget = () => {
   const [openReadNow, setOpenReadNow] = useState(false)
   const [openComicsPanel, setOpenComicsPanel] = useState(false)
+
   return (
     <>
       <TouchableOpacity

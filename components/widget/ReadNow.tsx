@@ -44,10 +44,10 @@ const ReadNow = ({
             />
             <View>
               <Text style={{ fontSize: 11, color: "#fff", fontWeight: 600 }}>
-                Episode 3
+                Read Orisha warz today
               </Text>
               <Text style={{ fontSize: 11, color: "#CECCCC" }}>
-                The Atlantean Chronicles
+                New episodes available
               </Text>
             </View>
           </View>
