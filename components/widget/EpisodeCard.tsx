@@ -4,7 +4,7 @@ import React from "react"
 // @ts-ignore
 import noImage from "../../assets/images/widget/no-image.png"
 
-const ComicsCard = ({
+const EpisodeCard = ({
   cover_img = "",
   episode = 0,
   title = "",
@@ -35,4 +35,4 @@ const ComicsCard = ({
   )
 }
 
-export default ComicsCard
+export default EpisodeCard

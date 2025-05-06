@@ -20,43 +20,46 @@ import comics from "../../assets/images/widget/comics.jpg"
 import poster from "../../assets/images/widget/orisha-warz-poster.png"
 import NewReleases from "./NewReleases"
 import InComicsPanel from "./InComicsPanel"
-import { ComicType } from "./types/comics"
-import EpisodesPanel from "./EpisodesPanel"
-import AllComics from "./AllComics"
+import { ComicType, EpisodeType } from "./types/comics"
 import { API_URL } from "./constants/API_URL"
+import { SimpleLineIcons } from "@expo/vector-icons"
 
 const { height } = Dimensions.get("window")
 
-const ComicsPanel = ({
+const EpisodesPanel = ({
   visible = false,
-  setOpenComicsPanel,
+  setOpenEpisodesPanel,
+  title,
+  series_id,
   apiKey,
 }: {
-  setOpenComicsPanel: React.Dispatch<React.SetStateAction<boolean>>
+  setOpenEpisodesPanel: React.Dispatch<React.SetStateAction<boolean>>
   visible: boolean
+  title: string
+  series_id: number
   apiKey: string
 }) => {
-  const [expand, setExpand] = useState(false)
-  const [openEpisodesPanel, setOpenEpisodesPanel] = useState(false)
-  const [comic, setComic] = useState<ComicType>()
+  const [expand, setExpand] = useState(true)
+  const [openInComicsPanel, setOpenInComicsPanel] = useState(false)
+  const [episode, setEpisode] = useState<EpisodeType>()
 
-  const handleSetComic = (comic: ComicType) => {
-    setComic(comic)
+  const handleSetEpisode = (episode: any) => {
+    setEpisode(episode)
   }
 
   const [isLoading, setIsLoading] = useState(true)
-  const [comics, setComics] = useState<ComicType[]>([])
+  const [episodes, setEpisodes] = useState<EpisodeType[]>([])
   useEffect(() => {
-    const response = fetch(`${API_URL}/comics`, {
+    const response = fetch(`${API_URL}/comics/${series_id}/episodes`, {
       headers: { "merchant-x-secret": `${apiKey}` },
     })
     response.then(async (data) => {
       try {
         const text = await data.text()
         if (text) {
-          const comics_ = JSON.parse(text)?.data as ComicType[]
-          if (comics_) {
-            setComics(comics_)
+          const episodes_ = JSON.parse(text)?.data as EpisodeType[]
+          if (episodes_) {
+            setEpisodes(episodes_)
           }
         }
       } catch (error) {
@@ -103,7 +106,7 @@ const ComicsPanel = ({
             }}
           >
             <Text style={{ color: "#CECCCC", fontSize: 12, fontWeight: 500 }}>
-              Orisha warz
+              {title}
             </Text>
             <View
               style={{
@@ -121,7 +124,7 @@ const ComicsPanel = ({
               </TouchableOpacity>
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => setOpenComicsPanel(!visible)}
+                onPress={() => setOpenEpisodesPanel(!visible)}
               >
                 <AntDesign name="close" size={18} color="#CF2C2C" />
               </TouchableOpacity>
@@ -131,7 +134,20 @@ const ComicsPanel = ({
 
         <ScrollView style={{ height: "100%", width: "100%" }}>
           <View style={{ padding: 12, gap: 16 }}>
-            {/* <View style={{ position: "relative" }}>
+            {/* <TouchableOpacity
+              style={{
+                padding: 0,
+                paddingBottom: 0,
+                flexDirection: "row",
+                gap: 10,
+                alignItems: "center",
+              }}
+              onPress={() => setOpenEpisodesPanel(!visible)}
+            >
+              <SimpleLineIcons name="arrow-left" size={12} color="black" />
+              <Text>Back to comics</Text>
+            </TouchableOpacity> */}
+            <View style={{ position: "relative" }}>
               <Image
                 source={poster}
                 style={{ width: "100%", height: 106, borderRadius: 10 }}
@@ -148,9 +164,10 @@ const ComicsPanel = ({
               >
                 <View style={{ marginBlock: "auto" }}>
                   <Text
-                    style={{ color: "#fff", fontSize: 13, fontWeight: 500 }}
+                    style={{ color: "#fff", fontSize: 12, fontWeight: 500 }}
                   >
-                    Orisha Wars -
+                    {/* Orisha Wars - */}
+                    {title}
                   </Text>
                   <Text
                     style={{ color: "#fff", fontSize: 13, fontWeight: 500 }}
@@ -170,7 +187,7 @@ const ComicsPanel = ({
                   </Text>
                 </View>
               </View>
-            </View> */}
+            </View>
             {isLoading ? (
               <View
                 style={{
@@ -181,23 +198,24 @@ const ComicsPanel = ({
                 <ActivityIndicator size={"large"} />
               </View>
             ) : (
-              <AllComics
-                comics={comics}
-                setOpenEpisodesPanel={setOpenEpisodesPanel}
-                openEpisodesPanel={openEpisodesPanel}
-                handleSetComic={handleSetComic}
+              <NewReleases
+                handleSetEpisode={handleSetEpisode}
+                openInComicsPanel={openInComicsPanel}
+                setOpenInComicsPanel={setOpenInComicsPanel}
+                episodes={episodes}
               />
             )}
           </View>
         </ScrollView>
       </View>
 
-      {openEpisodesPanel && (
-        <EpisodesPanel
-          title={comic?.title || ""}
-          visible={openEpisodesPanel}
-          setOpenEpisodesPanel={setOpenEpisodesPanel}
-          series_id={comic?.id || 0}
+      {openInComicsPanel && (
+        <InComicsPanel
+          title={episode?.title}
+          visible={openInComicsPanel}
+          setOpenInComicsPanel={setOpenInComicsPanel}
+          episode_id={episode?.id}
+          series_id={episode?.comics_series_id}
           apiKey={apiKey}
         />
       )}
@@ -205,4 +223,4 @@ const ComicsPanel = ({
   )
 }
 
-export default ComicsPanel
+export default EpisodesPanel

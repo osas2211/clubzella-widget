@@ -5,6 +5,9 @@ import {
   Image,
   Animated,
   TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
 } from "react-native"
 import React, { useEffect, useRef, useState } from "react"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
@@ -13,17 +16,52 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
 
 // @ts-ignore
 import comics from "../../assets/images/widget/comics.jpg"
+import { EpisodeType } from "./types/comics"
+import { API_URL } from "./constants/API_URL"
+import { WebView } from "react-native-webview"
 
 const InComicsPanel = ({
   visible = false,
   setOpenInComicsPanel,
   title,
+  episode_id,
+  series_id,
+  apiKey,
 }: {
   setOpenInComicsPanel: React.Dispatch<React.SetStateAction<boolean>>
   visible: boolean
   title?: string
+  episode_id?: number
+  series_id?: number
+  apiKey: string
 }) => {
   const [expand, setExpand] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [episode, setEpisode] = useState<EpisodeType>()
+  useEffect(() => {
+    const response = fetch(
+      `${API_URL}/comics/${series_id}/episodes/${episode_id}`,
+      {
+        headers: { "merchant-x-secret": `${apiKey}` },
+      }
+    )
+    response.then(async (data) => {
+      try {
+        const text = await data.text()
+        if (text) {
+          const episode_ = JSON.parse(text)?.data as EpisodeType
+          // console.log(episode_)
+          if (episode_) {
+            setEpisode(episode_)
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
+    })
+  }, [])
 
   return (
     <View
@@ -59,7 +97,14 @@ const InComicsPanel = ({
             gap: 10,
           }}
         >
-          <Text style={{ color: "#CECCCC", fontSize: 12, fontWeight: 500 }}>
+          <Text
+            style={{
+              color: "#CECCCC",
+              fontSize: 12,
+              fontWeight: 500,
+              width: "70%",
+            }}
+          >
             {title}
           </Text>
           <View
@@ -86,7 +131,7 @@ const InComicsPanel = ({
         </View>
       </Animated.View>
 
-      <ScrollView style={{ height: "100%", width: "100%" }}>
+      <View style={{ height: "100%", width: "100%" }}>
         <TouchableOpacity
           style={{
             padding: 10,
@@ -98,12 +143,46 @@ const InComicsPanel = ({
           onPress={() => setOpenInComicsPanel(!visible)}
         >
           <SimpleLineIcons name="arrow-left" size={18} color="black" />
-          <Text>Back to comics</Text>
+          <Text>Back to episodes</Text>
         </TouchableOpacity>
-        <Image source={comics} style={{ width: "100%", height: 550 }} />
-      </ScrollView>
+        {/* <Image source={comics} style={{ width: "100%", height: 550 }} /> */}
+        {isLoading ? (
+          <View
+            style={{
+              height: expand ? 500 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <ActivityIndicator size={"large"} />
+          </View>
+        ) : (
+          <WebView
+            source={{
+              uri: `https://docs.google.com/gview?embedded=true&url=${
+                episode?.episode_file?.media_url || ""
+              }`,
+            }}
+            style={styles.pdf}
+            scalesPageToFit={true}
+          />
+        )}
+      </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 25,
+  },
+  pdf: {
+    maxHeight: 545,
+    width: Dimensions.get("window").width,
+    borderRadius: 10,
+  },
+})
 
 export default InComicsPanel

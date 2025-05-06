@@ -1,11 +1,12 @@
 import { View, Text, Image, TouchableOpacity, Animated } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import CircleText from "./CircularText"
 import ReadNow from "./ReadNow"
 import ComicsPanel from "./ComicsPanel"
 import InComicsPanel from "./InComicsPanel"
+import { ComicType } from "./types/comics"
 
-const Widget = () => {
+const Widget = ({ apiKey }: { apiKey: string }) => {
   const [openReadNow, setOpenReadNow] = useState(false)
   const [openComicsPanel, setOpenComicsPanel] = useState(false)
 
@@ -46,6 +47,7 @@ const Widget = () => {
         <ComicsPanel
           visible={openComicsPanel}
           setOpenComicsPanel={setOpenComicsPanel}
+          apiKey={apiKey}
         />
       )}
     </>

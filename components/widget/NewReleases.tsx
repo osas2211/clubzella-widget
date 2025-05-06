@@ -1,7 +1,8 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native"
 import React, { useState } from "react"
-import ComicsCard from "./ComicsCard"
+import EpisodeCard from "././EpisodeCard"
 import InComicsPanel from "./InComicsPanel"
+import { ComicType, EpisodeType } from "./types/comics"
 
 const dummy_comics = [
   {
@@ -55,13 +56,15 @@ const dummy_comics = [
 ]
 
 const NewReleases = ({
-  handleSetComic,
+  handleSetEpisode,
   openInComicsPanel,
   setOpenInComicsPanel,
+  episodes,
 }: {
-  handleSetComic: (comic: any) => void
+  handleSetEpisode: (comic: any) => void
   setOpenInComicsPanel: React.Dispatch<React.SetStateAction<boolean>>
   openInComicsPanel: boolean
+  episodes: EpisodeType[]
 }) => {
   return (
     <>
@@ -76,17 +79,22 @@ const NewReleases = ({
               gap: 10,
             }}
           >
-            {dummy_comics.map((comic, index) => {
+            {episodes.map((episode, index) => {
               return (
                 <TouchableOpacity
                   key={index}
                   style={{ width: "31%" }}
                   onPress={() => {
-                    handleSetComic(comic)
+                    handleSetEpisode(episode)
                     setOpenInComicsPanel(!openInComicsPanel)
                   }}
                 >
-                  <ComicsCard {...comic} />
+                  <EpisodeCard
+                    cover_img={episode?.cover_file?.media_url}
+                    episode={episode?.id}
+                    series={episode?.comics_series_id}
+                    title={episode?.title}
+                  />
                 </TouchableOpacity>
               )
             })}

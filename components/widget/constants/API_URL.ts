@@ -1,0 +1,1 @@
+export const API_URL = "https://dev.api.clubzella.com/api/v1"
