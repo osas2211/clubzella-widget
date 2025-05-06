@@ -1,21 +1,16 @@
 import {
   View,
   Text,
-  ScrollView,
-  Image,
   Animated,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
   ActivityIndicator,
 } from "react-native"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import AntDesign from "@expo/vector-icons/AntDesign"
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
-
-// @ts-ignore
-import comics from "../../assets/images/widget/comics.jpg"
 import { EpisodeType } from "./types/comics"
 import { API_URL } from "./constants/API_URL"
 import { WebView } from "react-native-webview"

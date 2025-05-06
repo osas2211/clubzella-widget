@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { View, Text, StyleSheet, Image, Animated, Easing } from "react-native"
 // @ts-ignore
-import club_zella_logo from "../../assets/images/widget/clubzella-logo.png"
 
 const circleText = "Episode 2 of Orisha wars is out - Read now - "
 const radius = 40 // Radius of the circle
@@ -44,7 +43,10 @@ export default function CircleText() {
           // marginLeft: -2,
         }}
       >
-        <Image source={club_zella_logo} style={{ height: 30, width: 40 }} />
+        <Image
+          source={require("../../assets/images/widget/clubzella-logo.png")}
+          style={{ height: 30, width: 40 }}
+        />
       </View>
 
       <Animated.View

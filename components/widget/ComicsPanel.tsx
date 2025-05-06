@@ -1,25 +1,15 @@
 import {
   View,
   Text,
-  Pressable,
   ScrollView,
-  Image,
   Animated,
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import AntDesign from "@expo/vector-icons/AntDesign"
-
-// @ts-ignore
-import comics from "../../assets/images/widget/comics.jpg"
-
-// @ts-ignore
-import poster from "../../assets/images/widget/orisha-warz-poster.png"
-import NewReleases from "./NewReleases"
-import InComicsPanel from "./InComicsPanel"
 import { ComicType } from "./types/comics"
 import EpisodesPanel from "./EpisodesPanel"
 import AllComics from "./AllComics"

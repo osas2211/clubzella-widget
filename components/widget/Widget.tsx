@@ -1,10 +1,8 @@
-import { View, Text, Image, TouchableOpacity, Animated } from "react-native"
-import React, { useEffect, useState } from "react"
+import { View, TouchableOpacity } from "react-native"
+import React, { useState } from "react"
 import CircleText from "./CircularText"
 import ReadNow from "./ReadNow"
 import ComicsPanel from "./ComicsPanel"
-import InComicsPanel from "./InComicsPanel"
-import { ComicType } from "./types/comics"
 
 const Widget = ({ apiKey }: { apiKey: string }) => {
   const [openReadNow, setOpenReadNow] = useState(false)

@@ -1,7 +1,5 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native"
-import React, { useState } from "react"
-import EpisodeCard from "././EpisodeCard"
-import InComicsPanel from "./InComicsPanel"
+import { View, Text, TouchableOpacity } from "react-native"
+import React from "react"
 import { ComicType } from "./types/comics"
 import ComicCard from "./ComicCard"
 

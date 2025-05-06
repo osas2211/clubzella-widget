@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Pressable,
   ScrollView,
   Image,
   Animated,
@@ -9,20 +8,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import AntDesign from "@expo/vector-icons/AntDesign"
-
-// @ts-ignore
-import comics from "../../assets/images/widget/comics.jpg"
-
 // @ts-ignore
 import poster from "../../assets/images/widget/orisha-warz-poster.png"
 import NewReleases from "./NewReleases"
 import InComicsPanel from "./InComicsPanel"
-import { ComicType, EpisodeType } from "./types/comics"
+import { EpisodeType } from "./types/comics"
 import { API_URL } from "./constants/API_URL"
-import { SimpleLineIcons } from "@expo/vector-icons"
 
 const { height } = Dimensions.get("window")
 
@@ -134,19 +128,6 @@ const EpisodesPanel = ({
 
         <ScrollView style={{ height: "100%", width: "100%" }}>
           <View style={{ padding: 12, gap: 16 }}>
-            {/* <TouchableOpacity
-              style={{
-                padding: 0,
-                paddingBottom: 0,
-                flexDirection: "row",
-                gap: 10,
-                alignItems: "center",
-              }}
-              onPress={() => setOpenEpisodesPanel(!visible)}
-            >
-              <SimpleLineIcons name="arrow-left" size={12} color="black" />
-              <Text>Back to comics</Text>
-            </TouchableOpacity> */}
             <View style={{ position: "relative" }}>
               <Image
                 source={poster}
