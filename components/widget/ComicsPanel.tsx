@@ -8,14 +8,14 @@ import {
   ActivityIndicator,
 } from "react-native"
 import React, { useEffect, useState } from "react"
-import FontAwesome from "@expo/vector-icons/FontAwesome"
+import Ionicons from "@expo/vector-icons/Ionicons"
 import AntDesign from "@expo/vector-icons/AntDesign"
 import { ComicType } from "./types/comics"
 import EpisodesPanel from "./EpisodesPanel"
 import AllComics from "./AllComics"
 import { API_URL } from "./constants/API_URL"
 
-const { height } = Dimensions.get("window")
+const { height, width } = Dimensions.get("window")
 
 const ComicsPanel = ({
   visible = false,
@@ -65,14 +65,13 @@ const ComicsPanel = ({
             zIndex: 1100,
             borderRadius: 15,
             justifyContent: "center",
-            // alignItems: "center",
+            alignItems: "center",
             position: "absolute",
             bottom: 20,
-            right: 20,
-            width: "100%",
-            // height: 140,
+            right: 15,
+            width: width - 30,
             backgroundColor: "#fff",
-            height: expand ? "90%" : 140,
+            height: expand ? height / 1.5 : 140,
             elevation: 4,
           },
         ]}
@@ -92,9 +91,23 @@ const ComicsPanel = ({
               gap: 10,
             }}
           >
-            <Text style={{ color: "#CECCCC", fontSize: 12, fontWeight: 500 }}>
+            <Text
+              style={{
+                color: "#F5F5F5",
+                fontSize: 25,
+                lineHeight: 25,
+                fontFamily: "MamaKilo",
+                textTransform: "uppercase",
+              }}
+            >
               Orisha warz
             </Text>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => setExpand(!expand)}
+            >
+              <Ionicons name="expand" size={24} color="#fff" />
+            </TouchableOpacity>
             <View
               style={{
                 flexDirection: "row",
@@ -105,15 +118,9 @@ const ComicsPanel = ({
             >
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => setExpand(!expand)}
-              >
-                <FontAwesome name="expand" size={18} color="#9C9A9A" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                activeOpacity={0.6}
                 onPress={() => setOpenComicsPanel(!visible)}
               >
-                <AntDesign name="close" size={18} color="#CF2C2C" />
+                <AntDesign name="close" size={24} color="#FF4D52" />
               </TouchableOpacity>
             </View>
           </View>
@@ -121,46 +128,6 @@ const ComicsPanel = ({
 
         <ScrollView style={{ height: "100%", width: "100%" }}>
           <View style={{ padding: 12, gap: 16 }}>
-            {/* <View style={{ position: "relative" }}>
-              <Image
-                source={poster}
-                style={{ width: "100%", height: 106, borderRadius: 10 }}
-              />
-              <View
-                style={{
-                  position: "absolute",
-                  padding: 10,
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                }}
-              >
-                <View style={{ marginBlock: "auto" }}>
-                  <Text
-                    style={{ color: "#fff", fontSize: 13, fontWeight: 500 }}
-                  >
-                    Orisha Wars -
-                  </Text>
-                  <Text
-                    style={{ color: "#fff", fontSize: 13, fontWeight: 500 }}
-                  >
-                    A Mythic Journey Awaits!
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 12,
-                      fontWeight: 300,
-                      width: "75%",
-                      marginTop: 5,
-                    }}
-                  >
-                    Experience the saga of ancient gods and fierce battles.
-                  </Text>
-                </View>
-              </View>
-            </View> */}
             {isLoading ? (
               <View
                 style={{

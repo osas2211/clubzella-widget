@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { View, Text, StyleSheet, Image, Animated, Easing } from "react-native"
 // @ts-ignore
 
-const circleText = "Episode 2 of Orisha wars is out - Read now - "
+const circleText = "New episode of orisha warz out now"
 const radius = 40 // Radius of the circle
 const center = radius // Center x & y
 const avatarSize = 50
@@ -44,7 +44,9 @@ export default function CircleText() {
         }}
       >
         <Image
-          source={require("../../assets/images/widget/clubzella-logo.png")}
+          src={
+            "https://res.cloudinary.com/osaretinfrank/image/upload/v1746531388/assets/widget/clubzella-logo_vl7jbk.png"
+          }
           style={{ height: 30, width: 40 }}
         />
       </View>

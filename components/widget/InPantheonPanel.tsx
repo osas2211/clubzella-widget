@@ -6,59 +6,33 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  ImageBackground,
+  Image,
+  ScrollView,
 } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import AntDesign from "@expo/vector-icons/AntDesign"
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
-import { EpisodeType } from "./types/comics"
-import { API_URL } from "./constants/API_URL"
-import Pdf from "react-native-pdf"
+import { pantheonT } from "./types/pantheon"
 
 const { height, width } = Dimensions.get("screen")
 
-const InComicsPanel = ({
+const InPantheonPanel = ({
   visible = false,
-  setOpenInComicsPanel,
+  setOpenInPantheonPanel,
   title,
-  episode_id,
-  series_id,
   apiKey,
+  pantheon,
 }: {
-  setOpenInComicsPanel: React.Dispatch<React.SetStateAction<boolean>>
+  setOpenInPantheonPanel: React.Dispatch<React.SetStateAction<boolean>>
   visible: boolean
   title?: string
-  episode_id?: number
-  series_id?: number
   apiKey: string
+  pantheon: pantheonT
 }) => {
   const [expand, setExpand] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
-  const [episode, setEpisode] = useState<EpisodeType>()
-  useEffect(() => {
-    const response = fetch(
-      `${API_URL}/comics/${series_id}/episodes/${episode_id}`,
-      {
-        headers: { "merchant-x-secret": `${apiKey}` },
-      }
-    )
-    response.then(async (data) => {
-      try {
-        const text = await data.text()
-        if (text) {
-          const episode_ = JSON.parse(text)?.data as EpisodeType
-          // console.log(episode_)
-          if (episode_) {
-            setEpisode(episode_)
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setIsLoading(false)
-      }
-    })
-  }, [])
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <View
@@ -103,7 +77,7 @@ const InComicsPanel = ({
               textTransform: "uppercase",
             }}
           >
-            Issue #{episode?.episode_number}
+            {title}
           </Text>
           <TouchableOpacity
             activeOpacity={0.6}
@@ -121,7 +95,7 @@ const InComicsPanel = ({
           >
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={() => setOpenInComicsPanel(!visible)}
+              onPress={() => setOpenInPantheonPanel(!visible)}
             >
               <AntDesign name="close" size={24} color="#FF4D52" />
             </TouchableOpacity>
@@ -130,6 +104,16 @@ const InComicsPanel = ({
       </Animated.View>
 
       <View style={{ height: "100%", width: "100%" }}>
+        <ImageBackground
+          source={require("../../assets/images/widget/pantheon/pantheon-bg.jpg")}
+          style={{
+            width: "100%",
+            height: "99%",
+            position: "absolute",
+            borderEndEndRadius: 100,
+          }}
+        />
+
         <TouchableOpacity
           style={{
             padding: 10,
@@ -138,12 +122,13 @@ const InComicsPanel = ({
             gap: 10,
             alignItems: "center",
           }}
-          onPress={() => setOpenInComicsPanel(!visible)}
+          onPress={() => setOpenInPantheonPanel(!visible)}
         >
-          <SimpleLineIcons name="arrow-left" size={18} color="black" />
-          <Text>Back to episodes</Text>
+          <SimpleLineIcons name="arrow-left" size={18} color="#fff" />
+          <Text style={{ color: "#fff" }}>Back to menu</Text>
         </TouchableOpacity>
         {/* <Image source={comics} style={{ width: "100%", height: 550 }} /> */}
+
         {isLoading ? (
           <View
             style={{
@@ -155,40 +140,48 @@ const InComicsPanel = ({
           </View>
         ) : (
           <>
-            <Pdf
-              trustAllCerts={false}
-              source={{
-                uri: episode?.episode_file?.media_url || "",
-                cache: true,
-              }}
-              onLoadComplete={(numberOfPages, filePath) => {
-                // console.log(`Number of pages: ${numberOfPages}`)
-                setIsLoading(false)
-              }}
-              onPageChanged={(page, numberOfPages) => {
-                // console.log(`Current page: ${page}`)
-              }}
-              onError={(error) => {
-                // console.log(error)
-              }}
-              onPressLink={(uri) => {
-                // console.log(`Link pressed: ${uri}`)
-              }}
-              style={styles.pdf}
-              onLoadProgress={(num) => {
-                // setIsLoading(true)
-                // console.log(num)
-              }}
-            />
-            {/* <WebView
-              source={{
-                uri: `https://docs.google.com/gview?embedded=true&url=${
-                  episode?.episode_file?.media_url || ""
-                }`,
-              }}
-              style={styles.pdf}
-              scalesPageToFit={true}
-            /> */}
+            <ScrollView>
+              <View style={{ gap: 30, padding: 12, marginBottom: 20 }}>
+                <View
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    source={pantheon.cover_image as any}
+                    style={{ height: 250, width: "60%", objectFit: "contain" }}
+                  />
+                </View>
+                <View style={{ gap: 10 }}>
+                  <Text style={styles.label}>
+                    <Text style={styles.bold}>Power:</Text> {pantheon?.power}
+                  </Text>
+
+                  <Text style={styles.label}>
+                    <Text style={styles.bold}>Last seen:</Text>{" "}
+                    {pantheon?.lastSeen}
+                  </Text>
+
+                  <Text style={styles.label}>
+                    <Text style={styles.bold}>Category:</Text>
+                    {"  "}
+                    {pantheon?.category}
+                  </Text>
+
+                  <Text style={styles.label}>
+                    <Text style={styles.bold}>Personality:</Text>
+                    {pantheon?.personality}
+                  </Text>
+
+                  <Text style={styles.label}>
+                    <Text style={styles.bold}>Backstory:</Text>{" "}
+                    {pantheon?.backstory}
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
           </>
         )}
       </View>
@@ -197,18 +190,15 @@ const InComicsPanel = ({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    marginTop: 25,
+  label: {
+    color: "#CECCCC",
+    fontSize: 14,
+    lineHeight: 22,
   },
-  pdf: {
-    height: "90%",
-    width: "100%",
-    borderRadius: 10,
-    // flex: 1,
+  bold: {
+    fontWeight: "bold",
+    color: "#fff",
   },
 })
 
-export default InComicsPanel
+export default InPantheonPanel
