@@ -1,5 +1,5 @@
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,20 +30,23 @@ const Pantheon = ({
       }}
     >
       <Text style={{ fontWeight: 600 }}>Orisha Pantheon</Text>
-      <ScrollView horizontal={false} showsHorizontalScrollIndicator={true}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            gap: 5,
-          }}
-        >
-          {orisha_pantheon.map((pantheon, index) => {
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: 5,
+          paddingRight: 10,
+        }}
+      >
+        <FlatList
+          data={orisha_pantheon}
+          horizontal={true}
+          renderItem={({ index, item: pantheon }) => {
             return (
               <TouchableOpacity
                 activeOpacity={pantheon?.locked ? 1 : 0.5}
                 key={index}
-                style={{ width: 100 }}
+                style={{ width: 100, marginRight: 10 }}
                 onPress={() => {
                   if (!pantheon.locked) {
                     handleSetPantheon(pantheon)
@@ -54,9 +57,9 @@ const Pantheon = ({
                 <PantheonCard {...pantheon} />
               </TouchableOpacity>
             )
-          })}
-        </View>
-      </ScrollView>
+          }}
+        />
+      </View>
     </View>
   )
 }

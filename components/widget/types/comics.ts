@@ -17,24 +17,54 @@ export interface ComicType {
   comics_episode_unpublished: number
 }
 
-// export interface ComicType {
-//   casts: string
-//   comics_series: { id: number; title: string }
-//   comics_series_id: number
-//   cover_file: {
-//     id: number
-//     media_url: string
-//   }
-//   descriptions: string
-//   episode_number: number
-//   id: number
-//   meta: {
-//     created_by: string
-//     created_on: string
-//   }
-//   status: "active" | "inactive"
-//   title: string
-// }
+export interface EpisodePageType {
+  comics_episode: {
+    id: number
+    status: "active"
+    title: string
+  }
+  dimensions: null
+  id: number
+  page_file: {
+    id: number
+    media_url: string
+  }
+  page_number: number
+  status: "active"
+}
+
+export interface EpisodePageMediaURL {
+  main: string
+  thumbnail: string
+  mobile: string
+  avif: string
+  sources: {
+    avif: [
+      {
+        srcset: string
+        media: string
+        type: string
+      },
+      {
+        srcset: string
+        media: string
+        type: string
+      }
+    ]
+    webp: [
+      {
+        srcset: string
+        media: string
+        type: string
+      },
+      {
+        srcset: string
+        media: string
+        type: string
+      }
+    ]
+  }
+}
 
 export interface EpisodeType {
   id: number

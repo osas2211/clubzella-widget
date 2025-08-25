@@ -262,11 +262,11 @@ const EpisodesPanel = ({
                     episodes={episodes}
                   />
                 </View>
-                <Pantheon
+                {/* <Pantheon
                   handleSetPantheon={handleSetPantheon}
                   openInPantheonPanel={openInPantheonPanel}
                   setOpenInPantheonPanel={setOpenInPantheonPanel}
-                />
+                /> */}
               </View>
             )}
           </View>

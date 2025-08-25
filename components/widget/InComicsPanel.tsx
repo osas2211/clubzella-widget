@@ -6,14 +6,19 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  FlatList,
+  Image,
 } from "react-native"
 import React, { useEffect, useState } from "react"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import AntDesign from "@expo/vector-icons/AntDesign"
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons"
-import { EpisodeType } from "./types/comics"
+import {
+  EpisodePageMediaURL,
+  EpisodePageType,
+  EpisodeType,
+} from "./types/comics"
 import { API_URL } from "./constants/API_URL"
-import Pdf from "react-native-pdf"
 
 const { height, width } = Dimensions.get("screen")
 
@@ -35,6 +40,8 @@ const InComicsPanel = ({
   const [expand, setExpand] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [episode, setEpisode] = useState<EpisodeType>()
+  const [episodePages, setEpisodePages] = useState<EpisodePageMediaURL[]>()
+
   useEffect(() => {
     const response = fetch(
       `${API_URL}/comics/${series_id}/episodes/${episode_id}`,
@@ -42,6 +49,34 @@ const InComicsPanel = ({
         headers: { "merchant-x-secret": `${apiKey}` },
       }
     )
+    const pages = fetch(
+      `${API_URL}/comics/${series_id}/episodes/${episode_id}/pages`,
+      {
+        headers: { "merchant-x-secret": `${apiKey}` },
+      }
+    )
+    pages.then(async (data) => {
+      try {
+        const text = await data.text()
+        if (text) {
+          const episode_pages = JSON.parse(text)?.data as EpisodePageType[]
+          // console.log(episode_pages)
+          if (episode_pages) {
+            setEpisodePages(
+              episode_pages.map((data) => {
+                return JSON.parse(
+                  data.page_file.media_url
+                ) as EpisodePageMediaURL
+              })
+            )
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
+    })
     response.then(async (data) => {
       try {
         const text = await data.text()
@@ -67,12 +102,10 @@ const InComicsPanel = ({
           zIndex: 1100,
           borderRadius: 15,
           justifyContent: "center",
-          // alignItems: "center",
           position: "absolute",
           bottom: 20,
           right: 15,
           width: width - 30,
-          // height: 140,
           backgroundColor: "#fff",
           height: expand ? height / 1.36 : 140,
           elevation: 4,
@@ -155,7 +188,7 @@ const InComicsPanel = ({
           </View>
         ) : (
           <>
-            <Pdf
+            {/* <Pdf
               trustAllCerts={false}
               source={{
                 uri: episode?.episode_file?.media_url || "",
@@ -179,7 +212,7 @@ const InComicsPanel = ({
                 // setIsLoading(true)
                 // console.log(num)
               }}
-            />
+            /> */}
             {/* <WebView
               source={{
                 uri: `https://docs.google.com/gview?embedded=true&url=${
@@ -189,6 +222,37 @@ const InComicsPanel = ({
               style={styles.pdf}
               scalesPageToFit={true}
             /> */}
+
+            {!episodePages?.length ? (
+              <Text style={{ textAlign: "center", padding: 20, opacity: 0.5 }}>
+                No comics to show here
+              </Text>
+            ) : (
+              <View
+                style={{
+                  overflow: "hidden",
+                  height: expand ? (height - 88) / 1.36 : 90,
+                  borderRadius: 10,
+                }}
+              >
+                <FlatList
+                  data={episodePages}
+                  renderItem={(page) => {
+                    return (
+                      <Image
+                        src={page.item.mobile}
+                        key={page.index}
+                        style={{
+                          width: width - 30,
+                          height: width * 1.4,
+                          objectFit: "fill",
+                        }}
+                      />
+                    )
+                  }}
+                />
+              </View>
+            )}
           </>
         )}
       </View>
